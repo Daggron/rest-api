@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const postsRoute = require('./routes/posts');
 const favicon = require('serve-favicon');
 const path = require('path');
+const authRoutes = require('./routes/auth');
 require('dotenv/config');
 
 mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser:true,useUnifiedTopology:true,useCreateIndex:true});
@@ -30,7 +31,7 @@ app.use(bodyparser.urlencoded({extended:false}));
 
 app.use(express.static(path.join(__dirname,'/public')));
 
-app.use(favicon(path.join(__dirname  ,'public' , 'favicon.ico')));
+app.use(favicon(path.join(__dirname  ,'public' , 'favicon.jpg')));
 
 app.use(expressSession({
     secret : ' A keyboard , cat ,dog , Thanos killed spiderman in infinity war',
@@ -41,10 +42,12 @@ app.use(expressSession({
 app.use(expressValidator());
 
 app.use('/',postsRoute);
+app.use('/auth',authRoutes);
 
 
 
 const port = process.env.PORT || 3000;
+
 app.listen(port,()=>{
     console.log(`Server Up and running on port ${port}`);
-})
+});
